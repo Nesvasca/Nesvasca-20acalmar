@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            background-color: #e0f7fa; /* Light blue background */
             color: #333;
             margin: 0;
             padding: 0;
@@ -28,7 +28,7 @@
         h1 {
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
-            color: #2c3e50;
+            color: #00796b; /* Dark teal */
         }
         input {
             padding: 0.8rem;
@@ -38,9 +38,10 @@
             width: 100%;
             box-sizing: border-box;
             text-align: center;
+            margin-bottom: 1rem;
         }
         button {
-            background-color: #3498db;
+            background-color: #00796b; /* Dark teal */
             color: white;
             border: none;
             padding: 0.8rem 1.5rem;
@@ -51,7 +52,7 @@
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #2980b9;
+            background-color: #004d40; /* Darker teal */
         }
         .result {
             margin-top: 1.5rem;
@@ -64,11 +65,30 @@
             font-size: 0.9rem;
             color: #7f8c8d;
         }
+        .info-text {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        .image-container {
+            margin-top: 1.5rem;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Calculadora de Sono</h1>
+        <div class="image-container">
+            <img src="sleep.png" alt="Sleep Illustration">
+        </div>
+        <div class="info-text">
+            <p>De forma geral, o ciclo do sono dura 90 minutos por ciclo, e o corpo passa por vários ciclos durante a noite. Precisamos ter entre quatro e seis ciclos de sono para termos uma boa noite de sono.</p>
+        </div>
         <button onclick="calcularAcordar()">Dormir agora</button>
         <input type="text" id="horario" placeholder="Digite o horário (ex: 0920 para 9:20)" maxlength="5">
         <button onclick="calcularDormir()">Calcular horário para dormir</button>
@@ -124,21 +144,4 @@
             let resultados = ciclos.map(c => {
                 const minutosTotais = c * ciclo;
                 const horarioDormir = new Date(dataAcordar.getTime() - minutosTotais * 60000);
-                return `Dormir às ${formatarHora(horarioDormir)} (${c} ciclos)`;
-            });
-
-            document.getElementById("resultado").innerHTML = resultados.join("<br>");
-        }
-
-        // Função para formatar a hora no formato 12h (AM/PM)
-        function formatarHora(data) {
-            let horas = data.getHours();
-            let minutos = data.getMinutes();
-            const periodo = horas >= 12 ? 'PM' : 'AM';
-            horas = horas % 12 || 12; // Converte para 12h
-            minutos = String(minutos).padStart(2, '0'); // Garante dois dígitos nos minutos
-            return `${horas}:${minutos} ${periodo}`;
-        }
-    </script>
-</body>
-</html>
+                return `Dormir às ${formatarHora(horarioDormir)} (${c} cic
