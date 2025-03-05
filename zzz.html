@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sono</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+        input {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Sono</h1>
+        <button onclick="calcularAcordar()">Dormir agora</button>
+        <input type="text" id="horario" placeholder="Digite o horário (ex: 0920 para 9:20)" maxlength="5">
+        <button onclick="calcularDormir()">Calcular horário para dormir</button>
+        <div class="result" id="resultado"></div>
+        <div class="footer">
+            <p>Dormir bem é essencial! 😴</p>
+        </div>
+    </div>
+
+    <script>
+        // Função para formatar o input como HH:MM
+        document.getElementById('horario').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+            if (value.length > 2) {
+                value = value.slice(0, 2) + ':' + value.slice(2, 4); // Adiciona os dois pontos
+            }
+            e.target.value = value;
+        });
+
+        // Função para calcular horário de acordar
+        function calcularAcordar() {
+            const agora = new Date(); // Pega a hora atual
+            const ciclo = 90; // Duração de um ciclo em minutos
+            const ciclos = [5, 6]; // Número de ciclos recomendados
+
+            let resultados = ciclos.map(c => {
+                const minutosTotais = c * ciclo;
+                const horarioAcordar = new Date(agora.getTime() + minutosTotais * 60000);
+                return `Acordar às ${formatarHora(horarioAcordar)} (${c} ciclos)`;
+            });
+
+            document.getElementById("resultado").innerHTML = resultados.join("<br>");
+        }
+
+        // Função para calcular horário de dormir
+        function calcularDormir() {
+            const input = document.getElementById('horario').value;
+            const [hora, minuto] = input.split(':').map(Number);
+
+            if (isNaN(hora) || hora > 23 || (minuto && (minuto > 59 || minuto < 0))) {
+                alert('Por favor, insira um horário válido no formato HH:MM.');
+                return;
+            }
+
+            const minutosFormatados = minuto ? String(minuto).padStart(2, '0') : '00'; // Garante dois dígitos nos minutos
+
+            const ciclo = 90; // Duração de um ciclo em minutos
+            const ciclos = [5, 6]; // Número de ciclos recomendados
+
+            const dataAcordar = new Date();
+            dataAcordar.setHours(hora, minutosFormatados, 0, 0);
+
+            let resultados = ciclos.map(c => {
+                const minutosTotais = c * ciclo;
+                const horarioDormir = new Date(dataAcordar.getTime() - minutosTotais * 60000);
+                return `Dormir às ${formatarHora(horarioDormir)} (${c} ciclos)`;
+            });
+
+            document.getElementById("resultado").innerHTML = resultados.join("<br>");
+        }
+
+        // Função para formatar a hora no formato 12h (AM/PM)
+        function formatarHora(data) {
+            let horas = data.getHours();
+            let minutos = data.getMinutes();
+            const periodo = horas >= 12 ? 'PM' : 'AM';
+            horas = horas % 12 || 12; // Converte para 12h
+            minutos = String(minutos).padStart(2, '0'); // Garante dois dígitos nos minutos
+            return `${horas}:${minutos} ${periodo}`;
+        }
+    </script>
+</body>
+</html>
